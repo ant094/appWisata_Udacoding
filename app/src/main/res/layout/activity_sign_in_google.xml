@@ -19,7 +19,7 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnSignInGoogle"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:drawableEnd="@drawable/google"

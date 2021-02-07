@@ -1,6 +1,7 @@
 package com.example.appwisata
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.appwisata.databinding.ActivitySignInGoogleBinding
@@ -18,6 +19,12 @@ class SignInGoogleActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInGoogleBinding
     private lateinit var auth: FirebaseAuth
     lateinit var googleSignInClient: GoogleSignInClient
+
+    lateinit var sharedPreferences: SharedPreferences
+    lateinit var editor: SharedPreferences.Editor
+
+    val KEYEMAIL = "email"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInGoogleBinding.inflate(layoutInflater)
@@ -26,6 +33,12 @@ class SignInGoogleActivity : AppCompatActivity() {
         // Configure Google Sign In
 
         auth = Firebase.auth
+
+        // Session
+        sharedPreferences = getSharedPreferences("Settings", 0)!!
+        editor = sharedPreferences.edit()
+
+        actionCheckSession()
 
         binding.btnSignInGoogle.setOnClickListener {
             signIn()
@@ -54,6 +67,7 @@ class SignInGoogleActivity : AppCompatActivity() {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
                 firebaseAuthWithGoogle(account.idToken!!)
+                account.email
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 // ...
@@ -68,7 +82,11 @@ class SignInGoogleActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
-                        startActivity(Intent(this,MainActivity::class.java))
+
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.putExtra("idUser", sharedPreferences.getString("idUser",user?.uid))
+                        intent.putExtra("email", sharedPreferences.getString("email",user?.email))
+                        startActivity(intent)
                     } else {
                         // If sign in fails, display a message to the user.
                         // ...
@@ -77,6 +95,15 @@ class SignInGoogleActivity : AppCompatActivity() {
                     // ...
                 }
     }
+
+    private fun actionCheckSession() {
+        if (sharedPreferences.contains(KEYEMAIL)) {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("email", sharedPreferences.getString("email",""))
+            intent.putExtra("idUser", sharedPreferences.getString("idUser",""))
+            startActivity(intent)
+            }
+        }
 
 
 }

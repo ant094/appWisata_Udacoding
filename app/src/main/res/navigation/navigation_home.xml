@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/listWisataFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation_home">
+    <fragment
+        android:id="@+id/listWisataFragment"
+        android:name="com.example.appwisata.ListWisataFragment"
+        android:label="fragment_list_wisata"
+        tools:layout="@layout/fragment_list_wisata" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.appwisata.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+
+</navigation>

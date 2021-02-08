@@ -23,7 +23,10 @@ class SignInGoogleActivity : AppCompatActivity() {
     lateinit var sharedPreferences: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
 
-    val KEYEMAIL = "email"
+    companion object {
+        const val KEYIDUSER = "idUser"
+        const val KEYEMAIL  = "email"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,8 +87,8 @@ class SignInGoogleActivity : AppCompatActivity() {
                         val user = auth.currentUser
 
                         val intent = Intent(this, MainActivity::class.java)
-                        intent.putExtra("idUser", sharedPreferences.getString("idUser",user?.uid))
-                        intent.putExtra("email", sharedPreferences.getString("email",user?.email))
+                        intent.putExtra("idUser", sharedPreferences.getString(KEYIDUSER,user?.uid))
+                        intent.putExtra("email", sharedPreferences.getString(KEYEMAIL,user?.email))
                         startActivity(intent)
                     } else {
                         // If sign in fails, display a message to the user.
@@ -99,8 +102,8 @@ class SignInGoogleActivity : AppCompatActivity() {
     private fun actionCheckSession() {
         if (sharedPreferences.contains(KEYEMAIL)) {
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("email", sharedPreferences.getString("email",""))
-            intent.putExtra("idUser", sharedPreferences.getString("idUser",""))
+            intent.putExtra("idUser", sharedPreferences.getString(KEYIDUSER,""))
+            intent.putExtra("email", sharedPreferences.getString(KEYEMAIL,""))
             startActivity(intent)
             }
         }

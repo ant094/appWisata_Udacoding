@@ -1,5 +1,6 @@
 package com.example.appwisata
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -18,8 +19,8 @@ class ListWisataFragment : Fragment() {
 
     lateinit var sharedPreferences: SharedPreferences
     lateinit var editor : SharedPreferences.Editor
-    val KEYEMAIL = "email"
     val KEYUSER = "idUser"
+    val KEYEMAIL = "email"
     var email : String? = null
     var idUser : String? = null
 
@@ -35,15 +36,16 @@ class ListWisataFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences = context?.getSharedPreferences("Settings", 0)!!
         editor = sharedPreferences.edit()
-        email = activity?.getIntent()?.getStringExtra("email")
-        idUser = activity?.getIntent()?.getStringExtra("idUser")
+        idUser = activity?.getIntent()?.getStringExtra(SignInGoogleActivity.KEYIDUSER)
+        email = activity?.getIntent()?.getStringExtra(SignInGoogleActivity.KEYEMAIL)
 
-        editor.putString(KEYEMAIL,email)
         editor.putString(KEYUSER,idUser)
+        editor.putString(KEYEMAIL,email)
         editor.apply();
 
-        Toast.makeText(requireContext(), sharedPreferences.getString(KEYEMAIL,""), Toast.LENGTH_SHORT).show()
-
+        binding.fab.setOnClickListener {
+            startActivity(Intent(context,FormActivity::class.java))
+        }
     }
     override fun onDestroyView() {
         super.onDestroyView()
